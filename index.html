@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,558 +7,215 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#E8231A;--accent:#FFD500;--tr:0.35s ease}
+[data-theme="dark"]{--bg:#0A0A0A;--bg2:#141414;--bg3:#1A1A1A;--text:#F0EDE6;--text2:rgba(240,237,230,0.55);--border:rgba(240,237,230,0.08);--border2:rgba(240,237,230,0.18);--card:#111;--nav:rgba(10,10,10,0.96);--inp:rgba(240,237,230,0.05)}
+[data-theme="light"]{--bg:#F5F2EB;--bg2:#EDEAE3;--bg3:#E5E2DB;--text:#0A0A0A;--text2:rgba(10,10,10,0.55);--border:rgba(10,10,10,0.08);--border2:rgba(10,10,10,0.2);--card:#fff;--nav:rgba(245,242,235,0.97);--inp:rgba(10,10,10,0.04)}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;transition:background var(--tr),color var(--tr)}
 
-  :root {
-    --red: #E8231A;
-    --black: #0A0A0A;
-    --off-white: #F0EDE6;
-    --mid: #1A1A1A;
-    --accent: #FFD500;
-  }
+/* CURSOR */
+.cursor{position:fixed;width:12px;height:12px;background:var(--red);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s}
+.cursor-ring{position:fixed;width:40px;height:40px;border:1px solid rgba(232,35,26,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
 
-  html { scroll-behavior: smooth; }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:var(--nav);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:background var(--tr)}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--text);text-decoration:none}
+.logo span{color:var(--red)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{text-decoration:none;color:var(--text);font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:.6;transition:opacity .2s,color .2s}
+.nav-links a:hover{opacity:1;color:var(--red)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-sel{background:var(--inp);border:1px solid var(--border2);color:var(--text);padding:6px 10px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:none;outline:none;transition:border-color .2s}
+.lang-sel:hover{border-color:var(--red)}
+.icon-btn{background:var(--inp);border:1px solid var(--border2);color:var(--text);width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:none;font-size:15px;transition:border-color .2s;flex-shrink:0}
+.icon-btn:hover{border-color:var(--red)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:4px}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mob-nav{display:none;position:fixed;top:70px;left:0;right:0;background:var(--nav);backdrop-filter:blur(12px);padding:20px 32px;z-index:190;border-bottom:1px solid var(--border);flex-direction:column;gap:0;transform:translateY(-10px);opacity:0;transition:transform .3s,opacity .3s}
+.mob-nav.open{transform:translateY(0);opacity:1}
+.mob-nav a{color:var(--text);text-decoration:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;opacity:.7;padding:14px 0;border-bottom:1px solid var(--border);transition:color .2s,opacity .2s}
+.mob-nav a:hover{opacity:1;color:var(--red)}
 
-  body {
-    background: var(--black);
-    color: var(--off-white);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    overflow-x: hidden;
-    cursor: none;
-  }
+/* HERO */
+.hero{min-height:100vh;display:grid;place-items:center;position:relative;overflow:hidden;padding:0 48px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(232,35,26,.09) 0%,transparent 70%);animation:pulseBg 6s ease-in-out infinite}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px}
+.hero-content{text-align:center;position:relative;z-index:2;max-width:920px}
+.eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:24px;opacity:0;animation:fadeUp .8s .2s forwards}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,12vw,160px);line-height:.92;margin-bottom:32px;opacity:0;animation:fadeUp .8s .4s forwards}
+.glitch{position:relative;color:var(--red);display:block}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;color:var(--red)}
+.glitch::before{animation:g1 4s infinite;clip-path:polygon(0 0,100% 0,100% 35%,0 35%);color:#00fff5;opacity:0}
+.glitch::after{animation:g2 4s infinite;clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%);color:#ff00c1;opacity:0}
+@keyframes g1{0%,89%,100%{opacity:0;transform:none}90%{opacity:.7;transform:translateX(-4px) skewX(-3deg)}92%{opacity:0}94%{opacity:.5;transform:translateX(4px)}96%{opacity:0}}
+@keyframes g2{0%,89%,100%{opacity:0;transform:none}91%{opacity:.6;transform:translateX(4px) skewX(3deg)}93%{opacity:0}95%{opacity:.4;transform:translateX(-3px)}97%{opacity:0}}
+.hero-sub{font-size:16px;line-height:1.7;opacity:0;animation:fadeUp .8s .6s forwards;color:var(--text2);max-width:500px;margin:0 auto 48px}
+.btn-group{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .8s forwards}
+.btn{padding:16px 36px;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:none;cursor:none;transition:all .3s;display:inline-block;font-weight:700;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)}
+.btn-p{background:var(--red);color:#fff}.btn-p:hover{background:#c41a12;transform:translateY(-2px)}
+.btn-o{background:transparent;color:var(--text);border:1px solid var(--border2)}.btn-o:hover{border-color:var(--text);transform:translateY(-2px)}
+.scroll-ind{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeIn 1s 1.5s forwards}
+.scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--red));animation:pulse 2s infinite}
+.scroll-txt{font-size:9px;letter-spacing:3px;text-transform:uppercase;opacity:.4;color:var(--text)}
 
-  /* Custom cursor */
-  .cursor {
-    position: fixed;
-    width: 12px; height: 12px;
-    background: var(--red);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
-    mix-blend-mode: normal;
-  }
-  .cursor-ring {
-    position: fixed;
-    width: 40px; height: 40px;
-    border: 1px solid rgba(232,35,26,0.4);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform 0.15s ease, width 0.3s, height 0.3s;
-  }
-  body:hover .cursor { opacity: 1; }
+/* TICKER */
+.ticker{background:var(--red);padding:14px 0;overflow:hidden;white-space:nowrap}
+.t-inner{display:inline-flex;animation:ticker 20s linear infinite}
+.t-item{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;margin-right:80px;color:#fff}
+.t-dot{color:rgba(255,255,255,.35);margin-right:80px}
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 48px;
-    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
-  }
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 3px;
-    color: var(--off-white);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .logo span { color: var(--red); }
-  .nav-links { display: flex; gap: 40px; list-style: none; }
-  .nav-links a {
-    text-decoration: none;
-    color: var(--off-white);
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    opacity: 0.7;
-    transition: opacity 0.2s, color 0.2s;
-  }
-  .nav-links a:hover { opacity: 1; color: var(--red); }
+/* SECTIONS */
+.sec{padding:120px 48px}
+.sec-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:16px}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,6vw,80px);line-height:1;margin-bottom:64px}
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    position: relative;
-    overflow: hidden;
-    padding: 0 48px;
-  }
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(232,35,26,0.08) 0%, transparent 70%);
-  }
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(240,237,230,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(240,237,230,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-  .hero-content {
-    text-align: center;
-    position: relative;
-    z-index: 2;
-    max-width: 900px;
-  }
-  .hero-eyebrow {
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
-  }
-  .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(72px, 12vw, 160px);
-    line-height: 0.92;
-    letter-spacing: -1px;
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.4s forwards;
-  }
-  .hero-title .line-red { color: var(--red); display: block; }
-  .hero-sub {
-    font-size: 16px;
-    line-height: 1.7;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.6s forwards;
-    color: rgba(240,237,230,0.6);
-    max-width: 500px;
-    margin: 0 auto 48px;
-  }
-  .btn-group {
-    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.8s forwards;
-  }
-  .btn {
-    padding: 16px 36px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: none;
-    cursor: none;
-    transition: all 0.3s;
-    display: inline-block;
-  }
-  .btn-primary {
-    background: var(--red);
-    color: white;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-  }
-  .btn-primary:hover { background: #c41a12; transform: translateY(-2px); }
-  .btn-outline {
-    background: transparent;
-    color: var(--off-white);
-    border: 1px solid rgba(240,237,230,0.3);
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-  }
-  .btn-outline:hover { border-color: var(--off-white); transform: translateY(-2px); }
+/* SERVICES */
+.srv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border)}
+.srv-card{background:var(--bg);padding:48px 40px;position:relative;transition:background .3s;overflow:hidden}
+.srv-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.srv-card:hover::before{transform:scaleX(1)}
+.srv-card:hover{background:var(--bg2)}
+.srv-num{font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(232,35,26,.12);line-height:1;margin-bottom:24px}
+.srv-icon{font-size:36px;margin-bottom:20px}
+.srv-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:16px}
+.srv-desc{font-size:14px;line-height:1.7;color:var(--text2)}
 
-  .scroll-indicator {
-    position: absolute;
-    bottom: 40px; left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    opacity: 0;
-    animation: fadeIn 1s 1.5s forwards;
-  }
-  .scroll-line {
-    width: 1px; height: 60px;
-    background: linear-gradient(to bottom, transparent, var(--red));
-    animation: pulse 2s infinite;
-  }
-  .scroll-text { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.4; }
+/* PROJECTS */
+.proj-bg{background:var(--bg3)}
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.proj-card{background:var(--card);overflow:hidden;transition:transform .4s,box-shadow .4s}
+.proj-card:hover{transform:translateY(-8px);box-shadow:0 24px 48px rgba(232,35,26,.12)}
+.proj-img{width:100%;height:240px;object-fit:cover;object-position:top;display:block;background:var(--bg2)}
+.proj-info{padding:28px}
+.proj-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.proj-name{font-family:'Bebas Neue',sans-serif;font-size:26px;margin-bottom:12px}
+.proj-price{font-size:22px;font-weight:700;color:var(--accent);margin-bottom:20px}
+.proj-link{display:inline-block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text);text-decoration:none;border-bottom:1px solid var(--border2);padding-bottom:2px;transition:border-color .2s,color .2s}
+.proj-link:hover{border-color:var(--red);color:var(--red)}
 
-  /* TICKER */
-  .ticker {
-    background: var(--red);
-    padding: 14px 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .ticker-inner {
-    display: inline-flex;
-    animation: ticker 18s linear infinite;
-  }
-  .ticker-item {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 3px;
-    margin-right: 80px;
-    color: white;
-  }
-  .ticker-dot { color: rgba(255,255,255,0.4); margin-right: 80px; }
+/* ETHUTE */
+.eth-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.eth-mock{position:relative}
+.eth-mock img{width:100%;max-width:300px;border-radius:20px;box-shadow:0 32px 80px rgba(0,0,0,.5);display:block;margin:0 auto;border:3px solid var(--border)}
+.eth-badge{position:absolute;top:20px;right:calc(50% - 150px + 10px);background:var(--red);color:#fff;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px 14px}
+.eth-chips{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px}
+.eth-chip{background:var(--bg);border:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px;transition:border-color .2s,transform .2s}
+.eth-chip:hover{border-color:var(--red);transform:translateY(-2px)}
+.chip-icon{font-size:22px}
+.chip-name{font-size:13px;font-weight:700;display:block}
+.chip-detail{font-size:11px;color:var(--text2)}
 
-  /* SERVICES */
-  .section { padding: 120px 48px; }
-  .section-label {
-    font-size: 10px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 16px;
-  }
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 6vw, 80px);
-    line-height: 1;
-    margin-bottom: 64px;
-  }
+/* PRICING */
+.pr-bg{background:var(--bg2)}
+.pr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));border:1px solid var(--border)}
+.pr-card{padding:48px 36px;border-right:1px solid var(--border);background:var(--bg);position:relative;transition:background .3s}
+.pr-card:last-child{border-right:none}
+.pr-card.hot{background:var(--red)}
+.pr-card.hot *{--text2:rgba(255,255,255,.75)}
+.hot-badge{position:absolute;top:20px;right:20px;background:var(--accent);color:#000;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;font-weight:700}
+.pr-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text2);margin-bottom:14px}
+.pr-name{font-family:'Bebas Neue',sans-serif;font-size:34px;margin-bottom:20px}
+.pr-price{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;color:var(--red)}
+.pr-card.hot .pr-price{color:#fff}
+.pr-period{font-size:13px;color:var(--text2);margin-bottom:28px}
+.pr-div{height:1px;background:var(--border);margin-bottom:28px}
+.pr-card.hot .pr-div{background:rgba(255,255,255,.2)}
+.pr-feats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
+.pr-feat{font-size:14px;color:var(--text2);display:flex;align-items:center;gap:10px}
+.pr-feat::before{content:'✓';color:var(--red);font-weight:700;flex-shrink:0}
+.pr-card.hot .pr-feat::before{color:var(--accent)}
+.pr-btn{display:block;text-align:center;padding:14px 24px;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;text-decoration:none;cursor:none;transition:all .3s;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%)}
+.pr-btn-o{border:1px solid var(--border2);color:var(--text);background:transparent}
+.pr-btn-o:hover{border-color:var(--red);color:var(--red)}
+.pr-btn-w{background:#fff;color:var(--red)}
+.pr-btn-w:hover{background:#f0ede6}
 
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1px;
-    background: rgba(240,237,230,0.08);
-    border: 1px solid rgba(240,237,230,0.08);
-  }
-  .service-card {
-    background: var(--black);
-    padding: 48px 40px;
-    position: relative;
-    transition: background 0.3s;
-    overflow: hidden;
-  }
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--red);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s;
-  }
-  .service-card:hover::before { transform: scaleX(1); }
-  .service-card:hover { background: #111; }
-  .service-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
-    color: rgba(232,35,26,0.15);
-    line-height: 1;
-    margin-bottom: 24px;
-  }
-  .service-icon { font-size: 36px; margin-bottom: 20px; }
-  .service-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-  }
-  .service-desc {
-    font-size: 14px;
-    line-height: 1.7;
-    color: rgba(240,237,230,0.55);
-  }
+/* ABOUT */
+.ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.ab-text p{font-size:16px;line-height:1.8;color:var(--text2);margin-bottom:24px}
+.ab-hl{border-left:2px solid var(--red);padding-left:24px;margin:36px 0}
+.ab-hl p{font-size:20px;font-style:italic;line-height:1.6;color:var(--text)!important}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.stat-box{border:1px solid var(--border);padding:28px;background:var(--bg2);position:relative}
+.stat-box::after{content:'';position:absolute;top:0;right:0;width:36px;height:36px;border-bottom:2px solid rgba(232,35,26,.2);border-left:2px solid rgba(232,35,26,.2)}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--red);line-height:1;margin-bottom:8px}
+.stat-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text2)}
 
-  /* TEMPLATES */
-  .templates { background: var(--mid); }
-  .templates-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-  }
-  .template-card {
-    background: var(--black);
-    overflow: hidden;
-    position: relative;
-    transition: transform 0.4s;
-  }
-  .template-card:hover { transform: translateY(-8px); }
-  .template-img {
-    width: 100%; height: 220px;
-    object-fit: cover;
-    display: block;
-    background: #1a1a1a;
-    position: relative;
-    overflow: hidden;
-  }
-  .template-placeholder {
-    width: 100%; height: 220px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    font-size: 48px;
-    background: linear-gradient(135deg, #1a1a1a, #222);
-    transition: background 0.3s;
-  }
-  .template-card:hover .template-placeholder { background: linear-gradient(135deg, #1f1f1f, #2a1a1a); }
-  .template-info { padding: 28px; }
-  .template-tag {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 8px;
-  }
-  .template-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px;
-    margin-bottom: 12px;
-  }
-  .template-price {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 20px;
-  }
-  .template-link {
-    display: inline-block;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--off-white);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(240,237,230,0.3);
-    padding-bottom: 2px;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .template-link:hover { border-color: var(--red); color: var(--red); }
+/* CONTACT */
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.ct-form{display:flex;flex-direction:column;gap:18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ff{display:flex;flex-direction:column;gap:7px}
+.ff label{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.5}
+.ff input,.ff textarea,.ff select{background:var(--inp);border:1px solid var(--border);color:var(--text);padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .3s;resize:vertical}
+.ff input:focus,.ff textarea:focus,.ff select:focus{border-color:var(--red)}
+.ff select option{background:var(--bg2)}
+.sub-btn{background:var(--red);color:#fff;border:none;padding:16px 36px;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .3s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);align-self:flex-start;font-weight:700}
+.sub-btn:hover{background:#c41a12;transform:translateY(-2px)}
+.ct-info h3{font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:28px}
+.ii{display:flex;gap:14px;margin-bottom:22px;align-items:flex-start}
+.ii-icon{font-size:20px;margin-top:2px}
+.ii-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:3px}
+.ii-val{font-size:15px;color:var(--text)}
 
-  /* ABOUT */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-  }
-  .about-text p {
-    font-size: 16px;
-    line-height: 1.8;
-    color: rgba(240,237,230,0.65);
-    margin-bottom: 24px;
-  }
-  .about-highlight {
-    border-left: 2px solid var(--red);
-    padding-left: 24px;
-    margin: 36px 0;
-  }
-  .about-highlight p {
-    font-size: 20px;
-    font-style: italic;
-    line-height: 1.6;
-    color: var(--off-white) !important;
-  }
-  .stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-  .stat-box {
-    border: 1px solid rgba(240,237,230,0.1);
-    padding: 32px;
-    position: relative;
-    overflow: hidden;
-  }
-  .stat-box::after {
-    content: '';
-    position: absolute;
-    bottom: 0; right: 0;
-    width: 40px; height: 40px;
-    border-left: 1px solid rgba(232,35,26,0.3);
-    border-top: 1px solid rgba(232,35,26,0.3);
-    bottom: auto; top: 0; left: auto; right: 0;
-  }
-  .stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 52px;
-    color: var(--red);
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-  .stat-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.5; }
+/* FOOTER */
+footer{background:var(--bg3);padding:40px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;border-top:1px solid var(--border)}
+.ft-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:var(--text)}
+.ft-logo span{color:var(--red)}
+footer p{font-size:12px;color:var(--text2);letter-spacing:1px}
 
-  /* PRICING BANNER */
-  .pricing-banner {
-    background: var(--red);
-    padding: 64px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 32px;
-  }
-  .pricing-banner-text h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 5vw, 64px);
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-  .pricing-banner-text p { font-size: 15px; opacity: 0.85; }
-  .btn-white {
-    background: white;
-    color: var(--red);
-    padding: 18px 40px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    cursor: none;
-    transition: all 0.3s;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-    font-weight: 700;
-    display: inline-block;
-  }
-  .btn-white:hover { background: var(--off-white); transform: translateY(-2px); }
+/* WHATSAPP */
+.wa{position:fixed;bottom:32px;right:32px;z-index:300;width:58px;height:58px;border-radius:50%;background:#25D366;color:#fff;cursor:none;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(37,211,102,.4);text-decoration:none;animation:waPop .6s 2s both,waPulse 3s 3s infinite;transition:transform .3s}
+.wa:hover{transform:scale(1.1)}
+.wa svg{width:28px;height:28px;fill:#fff}
+.wa-tip{position:absolute;right:66px;background:#25D366;color:#fff;font-size:12px;white-space:nowrap;padding:7px 13px;border-radius:4px;opacity:0;transform:translateX(6px);transition:opacity .3s,transform .3s;pointer-events:none}
+.wa:hover .wa-tip{opacity:1;transform:translateX(0)}
+@keyframes waPop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+@keyframes waPulse{0%,100%{box-shadow:0 8px 32px rgba(37,211,102,.4)}50%{box-shadow:0 8px 48px rgba(37,211,102,.7)}}
 
-  /* CONTACT */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-  }
-  .contact-form { display: flex; flex-direction: column; gap: 20px; }
-  .form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .form-field label {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    opacity: 0.5;
-  }
-  .form-field input,
-  .form-field textarea,
-  .form-field select {
-    background: rgba(240,237,230,0.05);
-    border: 1px solid rgba(240,237,230,0.12);
-    color: var(--off-white);
-    padding: 16px 20px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.3s;
-    resize: vertical;
-  }
-  .form-field input:focus,
-  .form-field textarea:focus,
-  .form-field select:focus { border-color: var(--red); }
-  .form-field select option { background: #1a1a1a; }
-  .submit-btn {
-    background: var(--red);
-    color: white;
-    border: none;
-    padding: 18px 40px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: none;
-    transition: all 0.3s;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-    align-self: flex-start;
-    font-weight: 700;
-  }
-  .submit-btn:hover { background: #c41a12; transform: translateY(-2px); }
-  .contact-info h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px;
-    margin-bottom: 32px;
-  }
-  .info-item {
-    display: flex; gap: 16px;
-    margin-bottom: 28px;
-    align-items: flex-start;
-  }
-  .info-icon { font-size: 20px; margin-top: 2px; }
-  .info-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.4; margin-bottom: 4px; }
-  .info-val { font-size: 15px; opacity: 0.8; }
+/* ANIMS */
+@keyframes pulseBg{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
 
-  /* FOOTER */
-  footer {
-    background: var(--mid);
-    padding: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 24px;
-    border-top: 1px solid rgba(240,237,230,0.06);
-  }
-  .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px;
-    letter-spacing: 3px;
-    color: var(--off-white);
-  }
-  .footer-logo span { color: var(--red); }
-  footer p { font-size: 12px; opacity: 0.35; letter-spacing: 1px; }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes ticker {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }
-
-  /* Reveal on scroll */
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Mobile */
-  @media (max-width: 768px) {
-    nav { padding: 20px 24px; }
-    .nav-links { gap: 20px; }
-    .nav-links a { font-size: 11px; }
-    .section { padding: 80px 24px; }
-    .hero { padding: 0 24px; }
-    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .pricing-banner { padding: 48px 24px; }
-    footer { padding: 32px 24px; flex-direction: column; text-align: center; }
-  }
+/* MOBILE */
+@media(max-width:900px){
+  nav{padding:16px 20px}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .mob-nav{display:flex}
+  .sec{padding:80px 20px}
+  .hero{padding:0 20px}
+  .ab-grid,.ct-grid,.eth-grid{grid-template-columns:1fr;gap:48px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .pr-grid{grid-template-columns:1fr}
+  .pr-card{border-right:none;border-bottom:1px solid var(--border)}
+  .pr-card:last-child{border-bottom:none}
+  footer{padding:28px 20px;flex-direction:column;text-align:center}
+  .wa{bottom:20px;right:20px}
+  .form-row{grid-template-columns:1fr}
+  .eth-badge{right:10px}
+}
 </style>
 </head>
 <body>
 
 <div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-ring" id="cring"></div>
+
+<!-- WHATSAPP FLOAT -->
+<a class="wa" href="https://wa.me/27833457023" target="_blank" aria-label="WhatsApp Us">
+  <span class="wa-tip">Chat on WhatsApp</span>
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 
 <!-- NAV -->
 <nav>
@@ -566,290 +223,321 @@
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#projects">Projects</a></li>
+    <li><a href="#ethute">ETHUTE</a></li>
+    <li><a href="#pricing">Pricing</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <div class="nav-right">
+    <select class="lang-sel" onchange="changeLang(this.value)">
+      <option value="en">🇿🇦 English</option>
+      <option value="zu">🇿🇦 IsiZulu</option>
+      <option value="af">🇿🇦 Afrikaans</option>
+      <option value="sp">🇿🇦 Sepedi</option>
+      <option value="xh">🇿🇦 IsiXhosa</option>
+      <option value="ts">🇿🇦 Xitsonga</option>
+    </select>
+    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    <button class="hamburger" id="hbg" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
+<div class="mob-nav" id="mobNav">
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#projects" onclick="closeMenu()">Projects</a>
+  <a href="#ethute" onclick="closeMenu()">ETHUTE</a>
+  <a href="#pricing" onclick="closeMenu()">Pricing</a>
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Rebel Software — Pretoria, South Africa</p>
+    <p class="eyebrow" data-i18n="eyebrow">Rebel Software — Pretoria, South Africa</p>
     <h1 class="hero-title">
-      Build.<br>
-      Learn.<br>
-      <span class="line-red">Innovate.</span>
+      <span data-i18n="h1a">Build.</span><br>
+      <span data-i18n="h1b">Learn.</span><br>
+      <span class="glitch" data-text="Innovate." data-i18n="h1c">Innovate.</span>
     </h1>
-    <p class="hero-sub">Your one-stop shop for web, mobile, and desktop development. Empowering the youth of South Africa through technology.</p>
+    <p class="hero-sub" data-i18n="heroSub">Your one-stop shop for web, mobile, and desktop development. Empowering the youth of South Africa through technology.</p>
     <div class="btn-group">
-      <a href="#projects" class="btn btn-primary">View Projects</a>
-      <a href="#contact" class="btn btn-outline">Get a Quote</a>
+      <a href="#projects" class="btn btn-p" data-i18n="btnP">View Projects</a>
+      <a href="#contact" class="btn btn-o" data-i18n="btnQ">Get a Quote</a>
     </div>
   </div>
-  <div class="scroll-indicator">
+  <div class="scroll-ind">
     <div class="scroll-line"></div>
-    <span class="scroll-text">Scroll</span>
+    <span class="scroll-txt" data-i18n="scroll">Scroll</span>
   </div>
 </section>
 
 <!-- TICKER -->
 <div class="ticker">
-  <div class="ticker-inner">
-    <span class="ticker-item">Web Development</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Mobile Apps</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Educational Software</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">AI Solutions</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Robotics</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Computer Literacy</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Desktop Apps</span><span class="ticker-dot">✦</span>
-    <!-- duplicate for seamless loop -->
-    <span class="ticker-item">Web Development</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Mobile Apps</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Educational Software</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">AI Solutions</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Robotics</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Computer Literacy</span><span class="ticker-dot">✦</span>
-    <span class="ticker-item">Desktop Apps</span><span class="ticker-dot">✦</span>
+  <div class="t-inner">
+    <span class="t-item">Web Development</span><span class="t-dot">✦</span>
+    <span class="t-item">Mobile Apps</span><span class="t-dot">✦</span>
+    <span class="t-item">Educational Software</span><span class="t-dot">✦</span>
+    <span class="t-item">AI Solutions</span><span class="t-dot">✦</span>
+    <span class="t-item">Robotics</span><span class="t-dot">✦</span>
+    <span class="t-item">Computer Literacy</span><span class="t-dot">✦</span>
+    <span class="t-item">Desktop Apps</span><span class="t-dot">✦</span>
+    <span class="t-item">Web Development</span><span class="t-dot">✦</span>
+    <span class="t-item">Mobile Apps</span><span class="t-dot">✦</span>
+    <span class="t-item">Educational Software</span><span class="t-dot">✦</span>
+    <span class="t-item">AI Solutions</span><span class="t-dot">✦</span>
+    <span class="t-item">Robotics</span><span class="t-dot">✦</span>
+    <span class="t-item">Computer Literacy</span><span class="t-dot">✦</span>
+    <span class="t-item">Desktop Apps</span><span class="t-dot">✦</span>
   </div>
 </div>
 
 <!-- SERVICES -->
-<section class="section" id="services">
-  <p class="section-label reveal">What We Offer</p>
-  <h2 class="section-title reveal">Our Services</h2>
-  <div class="services-grid">
-    <div class="service-card reveal">
-      <div class="service-num">01</div>
-      <div class="service-icon">🌐</div>
-      <h3 class="service-title">Web Development</h3>
-      <p class="service-desc">Custom websites and web applications built with modern technologies. From landing pages to full-stack platforms, we bring your vision to life.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-num">02</div>
-      <div class="service-icon">📱</div>
-      <h3 class="service-title">Mobile Development</h3>
-      <p class="service-desc">Native and cross-platform Android & iOS applications. We build apps that are fast, reliable, and loved by users.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-num">03</div>
-      <div class="service-icon">🎓</div>
-      <h3 class="service-title">Educational Software</h3>
-      <p class="service-desc">CAPS-aligned digital learning tools for South African schools. Bridging the gap between students and quality education.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-num">04</div>
-      <div class="service-icon">🤖</div>
-      <h3 class="service-title">AI & Robotics</h3>
-      <p class="service-desc">Cutting-edge artificial intelligence solutions and robotics integrations tailored for education, business, and innovation.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-num">05</div>
-      <div class="service-icon">🖥️</div>
-      <h3 class="service-title">Desktop Applications</h3>
-      <p class="service-desc">Powerful desktop software for Windows, macOS, and Linux — built for performance and ease of use.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-num">06</div>
-      <div class="service-icon">📚</div>
-      <h3 class="service-title">Programming Courses</h3>
-      <p class="service-desc">Computer literacy and programming training for individuals and organizations ready to embrace the digital era.</p>
-    </div>
+<section class="sec" id="services">
+  <p class="sec-label reveal" data-i18n="srvLabel">What We Offer</p>
+  <h2 class="sec-title reveal" data-i18n="srvTitle">Our Services</h2>
+  <div class="srv-grid">
+    <div class="srv-card reveal"><div class="srv-num">01</div><div class="srv-icon">🌐</div><h3 class="srv-name">Web Development</h3><p class="srv-desc">Custom websites and web applications built with modern technologies. From landing pages to full-stack platforms.</p></div>
+    <div class="srv-card reveal"><div class="srv-num">02</div><div class="srv-icon">📱</div><h3 class="srv-name">Mobile Development</h3><p class="srv-desc">Native and cross-platform Android & iOS apps that are fast, reliable, and beautifully designed.</p></div>
+    <div class="srv-card reveal"><div class="srv-num">03</div><div class="srv-icon">🎓</div><h3 class="srv-name">Educational Software</h3><p class="srv-desc">CAPS-aligned digital learning tools for South African schools — bridging the educational gap nationwide.</p></div>
+    <div class="srv-card reveal"><div class="srv-num">04</div><div class="srv-icon">🤖</div><h3 class="srv-name">AI & Robotics</h3><p class="srv-desc">Cutting-edge artificial intelligence and robotics integrations for education, business, and innovation.</p></div>
+    <div class="srv-card reveal"><div class="srv-num">05</div><div class="srv-icon">🖥️</div><h3 class="srv-name">Desktop Applications</h3><p class="srv-desc">Powerful cross-platform desktop software built for performance, reliability, and ease of use.</p></div>
+    <div class="srv-card reveal"><div class="srv-num">06</div><div class="srv-icon">📚</div><h3 class="srv-name">Programming Courses</h3><p class="srv-desc">Computer literacy and programming training for individuals and organisations ready for the digital era.</p></div>
   </div>
 </section>
 
-<!-- TEMPLATES / PROJECTS -->
-<section class="section templates" id="projects">
-  <p class="section-label reveal">Portfolio</p>
-  <h2 class="section-title reveal">Website Templates</h2>
-  <div class="templates-grid">
-    <div class="template-card reveal">
-      <div class="template-placeholder">🔥</div>
-      <div class="template-info">
-        <p class="template-tag">Advertising</p>
-        <h3 class="template-name">Fuego — Ad Website</h3>
-        <p class="template-price">R 3 000</p>
-        <a href="https://j3thr0-10111.github.io/E-commerce101/" target="_blank" class="template-link">View Project →</a>
+<!-- PROJECTS -->
+<section class="sec proj-bg" id="projects">
+  <p class="sec-label reveal">Portfolio</p>
+  <h2 class="sec-title reveal">Our Projects</h2>
+  <div class="proj-grid">
+    <div class="proj-card reveal">
+      <img src="1000048282.jpg" alt="ETHUTE Education Platform" class="proj-img">
+      <div class="proj-info">
+        <p class="proj-tag">Education Platform</p>
+        <h3 class="proj-name">ETHUTE — Grade 12 CAPS</h3>
+        <p class="proj-price">R 6 450</p>
+        <a href="#ethute" class="proj-link">Learn More →</a>
       </div>
     </div>
-    <div class="template-card reveal">
-      <div class="template-placeholder">⚡</div>
-      <div class="template-info">
-        <p class="template-tag">Business</p>
-        <h3 class="template-name">Rebel — Business Website</h3>
-        <p class="template-price">R 5 000</p>
-        <a href="#contact" class="template-link">Request Demo →</a>
+    <div class="proj-card reveal">
+      <img src="1000042253.jpg" alt="Fuego Streetwear Store" class="proj-img">
+      <div class="proj-info">
+        <p class="proj-tag">E-Commerce · Advertising</p>
+        <h3 class="proj-name">Fuego — Streetwear Store</h3>
+        <p class="proj-price">R 3 000</p>
+        <a href="https://j3thr0-10111.github.io/E-commerce101/" target="_blank" class="proj-link">View Live →</a>
       </div>
     </div>
-    <div class="template-card reveal">
-      <div class="template-placeholder">📖</div>
-      <div class="template-info">
-        <p class="template-tag">Education</p>
-        <h3 class="template-name">ETHUTE — Edu Platform</h3>
-        <p class="template-price">R 6 450</p>
-        <a href="#contact" class="template-link">Request Demo →</a>
+    <div class="proj-card reveal">
+      <img src="1000048412.jpg" alt="AstroList Task Manager" class="proj-img">
+      <div class="proj-info">
+        <p class="proj-tag">Mobile App</p>
+        <h3 class="proj-name">AstroList — Task Manager</h3>
+        <p class="proj-price">R 4 500</p>
+        <a href="#contact" class="proj-link">Request Demo →</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRICING BANNER -->
-<div class="pricing-banner reveal">
-  <div class="pricing-banner-text">
-    <h2>Websites from R 700 / pm</h2>
-    <p>Fully managed, hosted on the cloud — no technical stress on your end.</p>
+<!-- ETHUTE FEATURE -->
+<section class="sec" id="ethute">
+  <div class="eth-grid">
+    <div class="reveal">
+      <p class="sec-label">Featured Platform</p>
+      <h2 class="sec-title" style="margin-bottom:20px">ETHUTE<br>Education</h2>
+      <p style="font-size:16px;line-height:1.8;color:var(--text2);margin-bottom:18px">Free Grade 12 CAPS curriculum resources for Mathematics and Physical Sciences. Bridging the education gap across South Africa.</p>
+      <p style="font-size:16px;line-height:1.8;color:var(--text2);margin-bottom:32px">AI-driven problem solving with text and image inputs, progress tracking, Firebase auth, and multi-language support.</p>
+      <div class="eth-chips">
+        <div class="eth-chip"><span class="chip-icon">📐</span><div><span class="chip-name">Mathematics</span><span class="chip-detail">9 Chapters · Paper 1 &amp; 2</span></div></div>
+        <div class="eth-chip"><span class="chip-icon">⚗️</span><div><span class="chip-name">Physical Science</span><span class="chip-detail">Physics &amp; Chemistry</span></div></div>
+        <div class="eth-chip"><span class="chip-icon">💹</span><div><span class="chip-name">Accounting</span><span class="chip-detail">Financial Statements</span></div></div>
+        <div class="eth-chip"><span class="chip-icon">🤖</span><div><span class="chip-name">AI Tutor</span><span class="chip-detail">Image &amp; text input</span></div></div>
+      </div>
+      <a href="#contact" class="btn btn-p" style="margin-top:32px;display:inline-block">Request Access</a>
+    </div>
+    <div class="eth-mock reveal">
+      <img src="1000048282.jpg" alt="ETHUTE App Screenshot">
+      <div class="eth-badge">Free Access</div>
+    </div>
   </div>
-  <a href="#contact" class="btn-white">Get Started Today</a>
-</div>
+</section>
+
+<!-- PRICING -->
+<section class="sec pr-bg" id="pricing">
+  <p class="sec-label reveal">Transparent Costs</p>
+  <h2 class="sec-title reveal">Pricing Plans</h2>
+  <div class="pr-grid reveal">
+    <div class="pr-card">
+      <p class="pr-label">Starter</p>
+      <p class="pr-name">Basic Website</p>
+      <p class="pr-price">R 700</p>
+      <p class="pr-period">per month · cloud hosted</p>
+      <div class="pr-div"></div>
+      <ul class="pr-feats">
+        <li class="pr-feat">1–5 page website</li>
+        <li class="pr-feat">Cloud hosting included</li>
+        <li class="pr-feat">Mobile responsive design</li>
+        <li class="pr-feat">Basic SEO setup</li>
+        <li class="pr-feat">Monthly support</li>
+      </ul>
+      <a href="#contact" class="pr-btn pr-btn-o">Get Started</a>
+    </div>
+    <div class="pr-card hot">
+      <div class="hot-badge">Most Popular</div>
+      <p class="pr-label">Business</p>
+      <p class="pr-name">Business Website</p>
+      <p class="pr-price" style="color:#fff">R 5 000</p>
+      <p class="pr-period">once-off · or R 1 200/pm</p>
+      <div class="pr-div"></div>
+      <ul class="pr-feats">
+        <li class="pr-feat">Up to 15 pages</li>
+        <li class="pr-feat">Custom design &amp; branding</li>
+        <li class="pr-feat">Contact form + WhatsApp</li>
+        <li class="pr-feat">Google Analytics</li>
+        <li class="pr-feat">Priority support</li>
+        <li class="pr-feat">1 year free hosting</li>
+      </ul>
+      <a href="#contact" class="pr-btn pr-btn-w">Get Started</a>
+    </div>
+    <div class="pr-card">
+      <p class="pr-label">Enterprise</p>
+      <p class="pr-name">Custom Platform</p>
+      <p class="pr-price">POA</p>
+      <p class="pr-period">bespoke · project based</p>
+      <div class="pr-div"></div>
+      <ul class="pr-feats">
+        <li class="pr-feat">Full-stack web / mobile app</li>
+        <li class="pr-feat">AI &amp; database integration</li>
+        <li class="pr-feat">Multi-language support</li>
+        <li class="pr-feat">User authentication</li>
+        <li class="pr-feat">Dedicated developer</li>
+        <li class="pr-feat">Ongoing maintenance SLA</li>
+      </ul>
+      <a href="#contact" class="pr-btn pr-btn-o">Request Quote</a>
+    </div>
+  </div>
+</section>
 
 <!-- ABOUT -->
-<section class="section" id="about">
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <p class="section-label">Our Mission</p>
-      <h2 class="section-title">About<br>Rebel Software</h2>
-      <p>Rebel Software is a South African software development company on a mission to empower the youth through technology, education, and innovation.</p>
-      <div class="about-highlight">
-        <p>"We build tools that break barriers — giving every South African student and entrepreneur access to world-class technology."</p>
-      </div>
+<section class="sec" id="about">
+  <div class="ab-grid">
+    <div class="ab-text reveal">
+      <p class="sec-label">Our Mission</p>
+      <h2 class="sec-title">About<br>Rebel Software</h2>
+      <p>Rebel Software is a South African software company on a mission to empower youth through technology, education, and innovation.</p>
+      <div class="ab-hl"><p>"We build tools that break barriers — giving every South African student and entrepreneur access to world-class technology."</p></div>
       <p>From free Grade 12 CAPS resources to AI-powered business solutions, we combine technical excellence with a deep commitment to our community.</p>
-      <br>
-      <a href="#contact" class="btn btn-primary" style="margin-top:8px;">Work With Us</a>
+      <a href="#contact" class="btn btn-p" style="margin-top:32px;display:inline-block">Work With Us</a>
     </div>
     <div class="stats-grid reveal">
-      <div class="stat-box">
-        <div class="stat-num">3+</div>
-        <div class="stat-label">Years Active</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">R700</div>
-        <div class="stat-label">Starting Price /pm</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">12</div>
-        <div class="stat-label">CAPS Grades Covered</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">6</div>
-        <div class="stat-label">SA Languages Supported</div>
-      </div>
+      <div class="stat-box"><div class="stat-num">3+</div><div class="stat-label">Years Active</div></div>
+      <div class="stat-box"><div class="stat-num">R700</div><div class="stat-label">Starting /pm</div></div>
+      <div class="stat-box"><div class="stat-num">12</div><div class="stat-label">CAPS Grades</div></div>
+      <div class="stat-box"><div class="stat-num">6</div><div class="stat-label">SA Languages</div></div>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section class="section" id="contact" style="background: var(--mid);">
-  <p class="section-label reveal">Get In Touch</p>
-  <h2 class="section-title reveal">Start a Project</h2>
-  <div class="contact-grid">
-    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
-      <div class="form-field">
-        <label>Full Name</label>
-        <input type="text" placeholder="Your name" required>
+<section class="sec" id="contact" style="background:var(--bg3)">
+  <p class="sec-label reveal">Get In Touch</p>
+  <h2 class="sec-title reveal">Start a Project</h2>
+  <div class="ct-grid">
+    <form class="ct-form reveal" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="ff"><label>Full Name</label><input type="text" placeholder="Your name" required></div>
+        <div class="ff"><label>Email</label><input type="email" placeholder="you@example.com" required></div>
       </div>
-      <div class="form-field">
-        <label>Email Address</label>
-        <input type="email" placeholder="you@example.com" required>
-      </div>
-      <div class="form-field">
+      <div class="ff"><label>Phone (optional)</label><input type="tel" placeholder="+27 ..."></div>
+      <div class="ff">
         <label>Service Needed</label>
         <select>
           <option value="">Select a service...</option>
           <option>Web Development</option>
-          <option>Mobile App</option>
+          <option>Mobile App (Android / iOS)</option>
           <option>Educational Software</option>
-          <option>AI / Robotics</option>
+          <option>AI / Robotics Solution</option>
           <option>Desktop Application</option>
           <option>Programming Course</option>
           <option>Website Hosting (R700/pm)</option>
         </select>
       </div>
-      <div class="form-field">
-        <label>Message</label>
-        <textarea rows="5" placeholder="Tell us about your project..."></textarea>
-      </div>
-      <button type="submit" class="submit-btn">Send Message →</button>
-      <p id="form-success" style="color:#4caf50;font-size:14px;display:none;">✓ Message sent! We'll be in touch shortly.</p>
+      <div class="ff"><label>Message</label><textarea rows="5" placeholder="Tell us about your project..."></textarea></div>
+      <button type="submit" class="sub-btn">Send Message →</button>
+      <p id="fs" style="color:#4caf50;font-size:14px;display:none">✓ Message sent! We'll be in touch within 24 hours.</p>
     </form>
-    <div class="contact-info reveal">
+    <div class="ct-info reveal">
       <h3>Let's Build Something<br>Remarkable</h3>
-      <div class="info-item">
-        <div class="info-icon">📍</div>
-        <div>
-          <p class="info-label">Location</p>
-          <p class="info-val">Pretoria, South Africa</p>
-        </div>
-      </div>
-      <div class="info-item">
-        <div class="info-icon">🌐</div>
-        <div>
-          <p class="info-label">Website</p>
-          <p class="info-val">rebelsoftware.online</p>
-        </div>
-      </div>
-      <div class="info-item">
-        <div class="info-icon">💼</div>
-        <div>
-          <p class="info-label">Company</p>
-          <p class="info-val">Rebel Software Pty Ltd</p>
-        </div>
-      </div>
-      <div class="info-item">
-        <div class="info-icon">🎓</div>
-        <div>
-          <p class="info-label">Education Platform</p>
-          <p class="info-val">ETHUTE — Free Grade 12 CAPS Resources</p>
-        </div>
-      </div>
+      <div class="ii"><div class="ii-icon">📍</div><div><p class="ii-label">Location</p><p class="ii-val">Pretoria, South Africa</p></div></div>
+      <div class="ii"><div class="ii-icon">📱</div><div><p class="ii-label">WhatsApp</p><p class="ii-val">083 345 7023</p></div></div>
+      <div class="ii"><div class="ii-icon">🌐</div><div><p class="ii-label">Website</p><p class="ii-val">rebelsoftware.online</p></div></div>
+      <div class="ii"><div class="ii-icon">💼</div><div><p class="ii-label">Company</p><p class="ii-val">Rebel Software Pty Ltd</p></div></div>
+      <div class="ii"><div class="ii-icon">🎓</div><div><p class="ii-label">Education Platform</p><p class="ii-val">ETHUTE — Free Grade 12 CAPS</p></div></div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">REBEL<span>.</span>SOFTWARE</div>
+  <div class="ft-logo">REBEL<span>.</span>SOFTWARE</div>
   <p>© 2026 Rebel Software Pty Ltd — Empowering the Future of South Africa</p>
 </footer>
 
 <script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top = my + 'px';
+// CURSOR
+const cur=document.getElementById('cursor'),cring=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cring.style.left=rx+'px';cring.style.top=ry+'px';requestAnimationFrame(ar)})();
+
+// REVEAL
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target)}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// THEME
+let dark=true;
+function toggleTheme(){
+  dark=!dark;
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('themeBtn').textContent=dark?'🌙':'☀️';
+}
+
+// HAMBURGER
+let mopen=false;
+function toggleMenu(){mopen=!mopen;document.getElementById('hbg').classList.toggle('open',mopen);document.getElementById('mobNav').classList.toggle('open',mopen)}
+function closeMenu(){mopen=false;document.getElementById('hbg').classList.remove('open');document.getElementById('mobNav').classList.remove('open')}
+
+// LANGUAGE
+const i18n={
+  en:{eyebrow:'Rebel Software — Pretoria, South Africa',h1a:'Build.',h1b:'Learn.',h1c:'Innovate.',heroSub:'Your one-stop shop for web, mobile, and desktop development. Empowering the youth of South Africa through technology.',btnP:'View Projects',btnQ:'Get a Quote',scroll:'Scroll',srvLabel:'What We Offer',srvTitle:'Our Services'},
+  zu:{eyebrow:'Rebel Software — ePitoli, Ningizimu Afrika',h1a:'Yakha.',h1b:'Funda.',h1c:'Lungisa!',heroSub:'Inkampani yokuthuthukisa izinhlelo zekhompyutha. Sinika amandla intsha yaseNingizimu Afrika.',btnP:'Buka Imisebenzi',btnQ:'Cela Inani',scroll:'Skrola',srvLabel:'Esikwenzayo',srvTitle:'Izinsiza Zethu'},
+  af:{eyebrow:'Rebel Software — Pretoria, Suid-Afrika',h1a:'Bou.',h1b:'Leer.',h1c:'Innoveer.',heroSub:'Jou een-stopreiswinkel vir web- en mobiele sagteware-ontwikkeling in Suid-Afrika.',btnP:"Bekyk Projekte",btnQ:"Kry 'n Kwotasie",scroll:'Blaai',srvLabel:'Wat Ons Bied',srvTitle:'Ons Dienste'},
+  sp:{eyebrow:'Rebel Software — Pretoria, Afrika Borwa',h1a:'Aga.',h1b:'Ithuta.',h1c:'Tsosa!',heroSub:'Dikhamphani tša go aga disoftware tšeo di thuša basha ba Afrika Borwa.',btnP:'Bona Mešomo',btnQ:'Kgopela Theko',scroll:'Skrola',srvLabel:'Se Re Se Dirago',srvTitle:'Ditirelo Tša Rena'},
+  xh:{eyebrow:'Rebel Software — iPitori, uMzantsi Afrika',h1a:'Yakha.',h1b:'Funda.',h1c:'Lungisa!',heroSub:'Inkampani yakho yokuphuhlisa iisoftware. Sinika amandla abantu abatsha baseNingizimu Afrika.',btnP:'Jonga Iimveliso',btnQ:'Fumana Inani',scroll:'Scrola',srvLabel:'Esikwenzayo',srvTitle:'Iinkonzo Zethu'},
+  ts:{eyebrow:'Rebel Software — Pretoria, Afrika Dzonga',h1a:'Aka.',h1b:'Dyondza.',h1c:'Endlisa!',heroSub:'Kampani ya ku endla mapulogalamu ya khomphyutha. Hi nyika matimba vana va Afrika Dzonga.',btnP:'Vona Mirhi',btnQ:'Kumbula Xipimo',scroll:'Skrola',srvLabel:'Leswi Hi Endlaka',srvTitle:'Ndzawulo Ya Hina'},
+};
+function changeLang(code){
+  const t=i18n[code]||i18n.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(t[k]){el.textContent=t[k];if(k==='h1c')el.setAttribute('data-text',t[k])}
   });
-  function animateRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
+}
 
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
-
-  // Form handler
-  function handleSubmit(e) {
-    e.preventDefault();
-    document.getElementById('form-success').style.display = 'block';
-    e.target.reset();
-    setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
-  }
+// FORM
+function handleSubmit(e){
+  e.preventDefault();
+  document.getElementById('fs').style.display='block';
+  e.target.reset();
+  setTimeout(()=>document.getElementById('fs').style.display='none',6000);
+}
 </script>
 </body>
 </html>
